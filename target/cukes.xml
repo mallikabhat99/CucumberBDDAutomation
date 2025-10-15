@@ -1,14 +1,16 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<testsuite errors="0" failures="0" name="io.cucumber.core.plugin.JUnitFormatter" skipped="0" tests="2" time="0.245">
-<testcase classname="Application Login" name="Home page default login browser - arg" time="0.073">
-<system-out><![CDATA[Given User is on Netbanking landing page....................................passed
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="Cucumber" time="0.416" tests="2" skipped="0" failures="0" errors="0" timestamp="2025-10-14T06:14:20.123344Z">
+<testcase classname="Application Login" name="Home page default login browser - arg" time="0.035">
+<system-out><![CDATA[
+Given User is on Netbanking landing page....................................passed
 When User login into application with "jin" and "jan".......................passed
 Then Home page is populated.................................................passed
 And Cards are displayed is "true"...........................................passed
 ]]></system-out>
 </testcase>
-<testcase classname="Application Login" name="Home page default login failure - arg" time="0.005">
-<system-out><![CDATA[Given User is on Netbanking landing page....................................passed
+<testcase classname="Application Login" name="Home page default login failure - arg" time="0.006">
+<system-out><![CDATA[
+Given User is on Netbanking landing page....................................passed
 When User login into application with "pin" and "pan".......................passed
 Then Home page is populated.................................................passed
 And Cards are displayed is "false"..........................................passed

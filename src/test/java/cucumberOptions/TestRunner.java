@@ -9,10 +9,8 @@ import io.cucumber.junit.CucumberOptions;
 //Step definition  - identified when cucumber options also has same parent
 
 @RunWith(Cucumber.class)
-@CucumberOptions(features="src/test/java/features",monochrome=true,dryRun=false,strict=true,
-glue="stepDefinations",
-tags="@MobileTest",
-plugin= {"pretty","html:target/cucumber.html","json:target/cucumber.json","junit:target/cukes.xml"})
+@CucumberOptions(features="src/test/java/features",monochrome=true,dryRun=false,
+glue={"stepDefinations"})
 public class TestRunner {
 
 }
