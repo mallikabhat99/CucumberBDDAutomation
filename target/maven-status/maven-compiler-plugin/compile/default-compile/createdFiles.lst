@@ -1,1 +1,12 @@
+pojo\LoginResponse.class
+pojo\Courses.class
+pojo\WebAutomation.class
+pojo\LoginRequest.class
+pojo\OrderDetail.class
+pojo\AddPlace.class
+pojo\GetCourse.class
+pojo\Api.class
+pojo\Orders.class
+pojo\Location.class
 Cucumber\Automation\App.class
+pojo\Mobile.class
