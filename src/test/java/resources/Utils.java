@@ -5,6 +5,8 @@ import io.restassured.builder.ResponseSpecBuilder;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
 import io.restassured.http.ContentType;
+import io.restassured.path.json.JsonPath;
+import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
@@ -14,13 +16,19 @@ import java.nio.file.Paths;
 import java.util.Properties;
 
 public class Utils {
+    public static RequestSpecification req;
+
     public RequestSpecification requestSpecification() throws IOException {
-        PrintStream log = new PrintStream(Files.newOutputStream(Paths.get("logging.txt")));
-        return new RequestSpecBuilder().setBaseUri(getGlobalValue("baseUrl"))
-                .addQueryParam("key", "qaclick123")
-                .addFilter(RequestLoggingFilter.logRequestTo(log))
-                .addFilter(ResponseLoggingFilter.logResponseTo(log))
-                .setContentType(ContentType.JSON).build();
+        if (req == null) {
+            PrintStream log = new PrintStream(Files.newOutputStream(Paths.get("logging.txt")));
+            req = new RequestSpecBuilder().setBaseUri(getGlobalValue("baseUrl"))
+                    .addQueryParam("key", "qaclick123")
+                    .addFilter(RequestLoggingFilter.logRequestTo(log))
+                    .addFilter(ResponseLoggingFilter.logResponseTo(log))
+                    .setContentType(ContentType.JSON).build();
+            return req;
+        }
+        return req;
     }
 
     public ResponseSpecification responseSpecification() {
@@ -35,5 +43,11 @@ public class Utils {
         FileInputStream fis = new FileInputStream("C:\\Users\\LAPTOPS24\\Documents\\GitHub\\CucumberBDDAutomation\\src\\test\\java\\resources\\global.properties");
         prop.load(fis);
         return prop.getProperty(propKey);
+    }
+
+    public String getJsonPath(Response response, String key) {
+        String resp = response.asString();
+        JsonPath jsonPath = JsonPath.from(resp);
+        return jsonPath.get(key).toString();
     }
 }

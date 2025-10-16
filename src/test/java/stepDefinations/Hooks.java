@@ -3,31 +3,44 @@ package stepDefinations;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
 
+import java.io.IOException;
+
 public class Hooks {
-	
-	@Before("@MobileTest")
-	public void beforevalidation() {
-		//background and hooks cant be used together in case of hybrid apps
-		System.out.println("Run before mobile Tests - before hook");
-	}
 
-	@After("@MobileTest")
-	public void aftervalidation() {
-		//background and hooks cant be used together in case of hybrid apps
-		System.out.println("Run after mobile Tests - after hook");
-	}
-	
-	
-	@Before("@WebTest")
-	public void beforWebevalidation() {
-		//background and hooks cant be used together in case of hybrid apps
-		System.out.println("Run before web Tests - before hook");
-	}
+    @Before("@MobileTest")
+    public void beforevalidation() {
+        //background and hooks cant be used together in case of hybrid apps
+        System.out.println("Run before mobile Tests - before hook");
+    }
 
-	@After("@WebTest")
-	public void afterWebvalidation() {
-		//background and hooks cant be used together in case of hybrid apps
-		System.out.println("Run after web Tests - after hook");
-	}
+    @After("@MobileTest")
+    public void aftervalidation() {
+        //background and hooks cant be used together in case of hybrid apps
+        System.out.println("Run after mobile Tests - after hook");
+    }
+
+
+    @Before("@WebTest")
+    public void beforWebevalidation() {
+        //background and hooks cant be used together in case of hybrid apps
+        System.out.println("Run before web Tests - before hook");
+    }
+
+    @After("@WebTest")
+    public void afterWebvalidation() {
+        //background and hooks cant be used together in case of hybrid apps
+        System.out.println("Run after web Tests - after hook");
+    }
+
+    @Before("@DeletePlace")
+    public void beforeScenario() throws IOException {
+        // getplace id and run only when placeid is null
+        if(googleApi.place_id == null){
+            googleApi m = new googleApi();
+            m.addPlacePayloadWithAnd("Bhat", "Konkani", "Ujire");
+            m.userCallsWithHttpRequest("AddPlaceAPI", "POST");
+            m.verifyThePlace_idCreatedMapsToUsing("Bhat","GetPlaceAPI");
+        }
+    }
 
 }

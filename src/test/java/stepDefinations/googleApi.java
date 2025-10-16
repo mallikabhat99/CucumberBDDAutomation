@@ -10,6 +10,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.Assert.*;
 
@@ -23,6 +24,7 @@ import io.restassured.specification.ResponseSpecification;
 import org.junit.Assert;
 import pojo.AddPlace;
 import pojo.Location;
+import resources.APIResources;
 import resources.TestDataBuild;
 import resources.Utils;
 
@@ -32,35 +34,65 @@ public class googleApi extends Utils {
     RequestSpecification res;
     ResponseSpecification resSpec;
     Response response;
+    static String place_id;
     TestDataBuild data = new TestDataBuild();
 
-    @Given("Add Place Payload")
-    public void add_place_payload() throws IOException {
-        res = given().spec(requestSpecification()).body(data.addPlacePayload());
+    @Given("Add Place Payload with {string} {string} and {string}")
+    public void addPlacePayloadWithAnd(String name, String lang, String address) throws IOException {
+        res = given().spec(requestSpecification()).body(data.addPlacePayload(name, lang, address));
     }
 
-    @When("user calls AddPlaceApi with Post http request")
-    public void user_calls_add_place_api_with_post_http_request() {
-        resSpec = responseSpecification();
-        response = res.when().post("/maps/api/place/add/json").then().spec(resSpec).extract().response();
+
+    @When("user calls {string} with {string} http request")
+    public void userCallsWithHttpRequest(String resource, String httpMethod) {
+        //constructor of the enum will be called
+        APIResources apiResources = APIResources.valueOf(resource);
+        switch (httpMethod) {
+            case "POST":
+                response = res.when().post(apiResources.getResource());
+                break;
+            case "GET":
+                response = res.when().get(apiResources.getResource());
+                break;
+            case "DELETE":
+                response = res.when().delete(apiResources.getResource());
+                break;
+        }
+
     }
 
     @Then("the API call is success with status code {int}")
-    public void the_api_call_is_success_with_status_code(Integer int1) {
+    public void the_api_call_is_success_with_status_code(Integer statusCode) {
+        resSpec = responseSpecification();
+        response = response.then().spec(resSpec).extract().response();
         Assert.assertEquals(200, response.getStatusCode());
     }
 
     @And("{string} in response body is {string}")
     public void inResponseBodyIs(String key, String expectedValue) {
-        String resp = response.asString();
-        JsonPath jsonPath = JsonPath.from(resp);
-        Assert.assertEquals(expectedValue, jsonPath.getString(key));
+        Assert.assertEquals(expectedValue, getJsonPath(response, key));
     }
-
 
     @When("user calls {string} with Post http request")
     public void userCallsWithPostHttpRequest(String arg0) {
         // Write code here that turns the phrase above into concrete actions
         throw new PendingException();
+    }
+
+
+    @And("verify the place_id created maps to {string} using {string}")
+    public void verifyThePlace_idCreatedMapsToUsing(String expectedName, String resource) throws IOException {
+        place_id = getJsonPath(response, "place_id");
+        res = given().spec(requestSpecification()).
+                queryParam("place_id", place_id);
+        userCallsWithHttpRequest(resource, "GET");
+        String actualName = getJsonPath(response, "name");
+        Assert.assertEquals(expectedName, actualName);
+
+    }
+
+    @Given("Delete Place Payload")
+    public void deletePlacePayload() throws IOException {
+        res = given().spec(requestSpecification()).body(data.deletePlacePayload(place_id));
     }
 }
