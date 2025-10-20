@@ -12,4 +12,5 @@ public class App
         System.out.println( "Hello Jenkins!" );
 
     }
+}
 
