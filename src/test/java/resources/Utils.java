@@ -17,7 +17,6 @@ import java.util.Properties;
 
 public class Utils {
     public static RequestSpecification req;
-
     public RequestSpecification requestSpecification() throws IOException {
         if (req == null) {
             PrintStream log = new PrintStream(Files.newOutputStream(Paths.get("logging.txt")));
