@@ -42,7 +42,6 @@ public class googleApi extends Utils {
         res = given().spec(requestSpecification()).body(data.addPlacePayload(name, lang, address));
     }
 
-
     @When("user calls {string} with {string} http request")
     public void userCallsWithHttpRequest(String resource, String httpMethod) {
         //constructor of the enum will be called
